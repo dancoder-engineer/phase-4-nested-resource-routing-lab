@@ -4,8 +4,14 @@ rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
 
   def index
-    items = Item.all
-    render json: items, include: :user
+    if params[:user_id]
+      usr = User.find(params[:user_id])
+      itms = usr.items
+      render json: itms
+    else
+      items = Item.all
+      render json: items, include: :user
+    end
   end
 
   def show
